@@ -1,0 +1,60 @@
+version: "3.1"
+services:
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    restart: always
+    volumes:
+      - /app/node_modules
+      - ./client:/app:delegated
+    depends_on:
+      - server
+    ports:
+      - 3000:3000
+    networks:
+      - app
+
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - 3005:3000
+    volumes:
+      - ./server:/app:delegated
+      - /app/node_modules
+    depends_on:
+      - mongo
+      - redis
+    env_file:
+      - ./server/.env
+    environment:
+      - REDIS_HOST
+      - REDIS_PORT
+      - REDIS_PASSWORD
+    networks:
+      - app
+
+  mongo:
+    container_name: mongo
+    restart: always
+    image: mongo:latest
+    volumes:
+      - ./server/data:/data/db
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    restart: always
+
+networks:
+  app:
+    driver: bridge

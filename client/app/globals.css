@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	width: 1440px;
+	margin: 0 auto;
+}
+
+/* #1F8A70 green*/
+/* #F1F6F9 white*/
+/* #27374D black*/
+/* #FF7B54 orange*/
+
+/* #1F8A70 old color */
